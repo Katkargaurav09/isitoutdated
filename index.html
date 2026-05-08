@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Is It Outdated? — Check if any course, video, book, or content is still relevant today. Coming soon." />
+<title>Is It Outdated? — Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --ink: #1a1a1a;
+    --accent: #ff5722;
+    --muted: #6b6b6b;
+    --line: #e8e3da;
+    --card: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .logo .dot {
+    color: var(--accent);
+  }
+
+  .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* hero */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 0;
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 9vw, 7.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  h1 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  h1 .strike {
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+    text-decoration-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tagline {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--muted);
+    max-width: 580px;
+    line-height: 1.5;
+    margin-bottom: 3rem;
+    font-weight: 400;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+
+  /* example cards */
+  .examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 800px;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.8s 0.8s ease both;
+  }
+
+  .example {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 1.25rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+  }
+
+  .example:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  .example .verdict {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .verdict.fresh { background: #d4edda; color: #155724; }
+  .verdict.stale { background: #fde0d6; color: #c4421d; }
+  .verdict.update { background: #fff3cd; color: #856404; }
+
+  .example .item {
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+
+  .example .reason {
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* email signup */
+  .signup {
+    max-width: 520px;
+    animation: fadeUp 0.8s 1s ease both;
+  }
+
+  .signup-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .form {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.5rem;
+  }
+
+  .form input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    padding: 0.5rem 0;
+    outline: none;
+    color: var(--ink);
+  }
+
+  .form input::placeholder {
+    color: #b8b8b8;
+    font-style: italic;
+  }
+
+  .form button {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-radius: 2px;
+  }
+
+  .form button:hover {
+    background: var(--accent);
+  }
+
+  .form-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.6rem;
+  }
+
+  .success {
+    display: none;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .success.show {
+    display: block;
+    animation: fadeUp 0.4s ease;
+  }
+
+  /* footer */
+  footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    animation: fadeUp 0.8s 1.2s ease both;
+  }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* mobile tweaks */
+  @media (max-width: 600px) {
+    .container { padding: 1.25rem 1rem; }
+    .form { flex-direction: column; gap: 0.75rem; border-bottom: none; }
+    .form input { border-bottom: 2px solid var(--ink); padding: 0.6rem 0; }
+    .form button { width: 100%; padding: 0.9rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="logo">isitoutdated<span class="dot">.</span>com</div>
+      <div class="status"><span class="pulse"></span> launching soon</div>
+    </header>
+
+    <main class="hero">
+      <div class="label">— A new tool for the obsolete</div>
+
+      <h1>
+        is your<br>
+        <span class="strike">course</span>
+        <span class="italic">stuff</span><br>
+        still worth it?
+      </h1>
+
+      <p class="tagline">
+        Paste any course, video, article, or book — we'll tell you if the info is still accurate today, or if it's quietly gone stale. AI-powered. Refreshingly honest.
+      </p>
+
+      <div class="examples">
+        <div class="example">
+          <div class="verdict stale">Outdated</div>
+          <div class="item">"React Hooks Course 2019"</div>
+          <div class="reason">Uses class components mostly. Modern React looks very different now.</div>
+        </div>
+        <div class="example">
+          <div class="verdict fresh">Still Good</div>
+          <div class="item">"Intro to SQL — 2021"</div>
+          <div class="reason">SQL fundamentals haven't changed. Safe to learn.</div>
+        </div>
+        <div class="example">
+          <div class="verdict update">Mostly OK</div>
+          <div class="item">"Python for Data Science"</div>
+          <div class="reason">Core ideas hold up. Some library examples need updating.</div>
+        </div>
+      </div>
+
+      <div class="signup">
+        <div class="signup-label">Get notified when we launch</div>
+        <form class="form" id="signupForm" onsubmit="handleSubmit(event)">
+          <input type="email" placeholder="your@email.com" required id="emailInput" />
+          <button type="submit">Notify me</button>
+        </form>
+        <div class="form-note">No spam. One email when we go live.</div>
+        <div class="success" id="successMsg">✓ You're on the list. Talk soon.</div>
+      </div>
+    </main>
+
+    <footer>
+      <div>© 2026 isitoutdated.com</div>
+      <div>built in india · made with curiosity</div>
+    </footer>
+
+  </div>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value;
+      // For now, just show success. Later we'll connect this to a real signup service.
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('successMsg').classList.add('show');
+      // Optional: log emails to console for now
+      console.log('Signup:', email);
+    }
+  </script>
+</body>
+</html>
